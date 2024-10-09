@@ -96,10 +96,10 @@ class GenerateArucoMarker:
 
 # Example usage:
 if __name__ == "__main__":
-    marker_id = 0  # Example marker ID
-    pixel_size = 1  # Example pixel size for saving the image
+    marker_id = 234234  # Example marker ID
+    pixel_size = 100  # Example pixel size for saving the image
     marker = GenerateArucoMarker(marker_id, pixel_size)
-    # cv2.imwrite(f'aruco_marker_0.png', marker.create_aruco())
-    print(marker.create_aruco())
+    cv2.imwrite(f'aruco_marker_0.png', marker.create_aruco())
+    # print(marker.create_aruco())
 
     
