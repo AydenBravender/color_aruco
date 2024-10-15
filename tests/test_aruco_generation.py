@@ -30,10 +30,10 @@ class TestGenerateArucoMarker(unittest.TestCase):
         left_border = output_image[:, 0]
         right_border = output_image[:, -1]
 
-        self.assertTrue(np.all(top_border == [0, 0, 0]), "Top border is not black.")
-        self.assertTrue(np.all(bottom_border == [0, 0, 0]), "Bottom border is not black.")
-        self.assertTrue(np.all(left_border == [0, 0, 0]), "Left border is not black.")
-        self.assertTrue(np.all(right_border == [0, 0, 0]), "Right border is not black.")
+        self.assertTrue(np.all(top_border == [0, 255, 255]), "Top border is not black.")
+        self.assertTrue(np.all(bottom_border == [0, 255, 255]), "Bottom border is not black.")
+        self.assertTrue(np.all(left_border == [0, 255, 255]), "Left border is not black.")
+        self.assertTrue(np.all(right_border == [0, 255, 255]), "Right border is not black.")
 
 # If running this file directly, run the tests
 if __name__ == '__main__':

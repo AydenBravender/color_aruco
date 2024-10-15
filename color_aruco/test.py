@@ -1,52 +1,84 @@
-import numpy as np
-import cv2
-# from tensorflow.keras.preprocessing import image
+import cv2 
+import numpy as np 
 
-image = cv2.imread('20241009_091818.png')
-original = image.copy()
-image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-lower = np.array([0, 0, 0], dtype="uint8")
-upper = np.array([90, 90, 90], dtype="uint8")
-mask = cv2.inRange(image, lower, upper)
+cap = cv2.VideoCapture(0) 
 
-cnts = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-cv2.fillPoly(mask, cnts, (255,255,255))
-result = cv2.bitwise_and(original,original,mask=mask)
+while True: 
+   _, frame = cap.read() 
+   # It converts the BGR color space of image to HSV color space 
+   hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV) 
 
-cv2.imshow('mask', mask)
-cv2.imshow('result', result)
-cv2.waitKey()
+   # Threshold of blue in HSV space 
+   lower_yellow = np.array([20, 100, 100]) 
+   upper_yellow = np.array([30, 255, 255]) 
+
+   # preparing the mask to overlay 
+   mask = cv2.inRange(hsv, lower_yellow, upper_yellow) 
+
+   # The black region in the mask has the value of 0, 
+   # so when multiplied with original image removes all non-blue regions 
+   result = cv2.bitwise_and(frame, frame, mask = mask) 
+
+   cv2.imshow('frame', frame) 
+   cv2.imshow('mask', mask)  	
+
+   # apply canny edge detection
+   edges = cv2.Canny(mask, 100, 200)
+
+   # get hough line segments
+   threshold = 100
+   minLineLength = 50
+   maxLineGap = 20
+   lines = cv2.HoughLinesP(mask, 1, np.pi/360, threshold, minLineLength, maxLineGap)
+   # draw lines
+   linear = np.zeros_like(mask)
+   if lines is not None:
+      for [line] in lines:
+         #print(line)
+         x1 = line[0]
+         y1 = line[1]
+         x2 = line[2]
+         y2 = line[3]
+         cv2.line(linear, (x1,y1), (x2,y2), (255), 1)
+   
+      # get bounds of white pixels
+      white = np.where(linear==255)
+      xmin, ymin, xmax, ymax = np.min(white[1]), np.min(white[0]), np.max(white[1]), np.max(white[0])
+      #print(xmin,xmax,ymin,ymax)
+
+      # draw bounding box on input
+      bounds = frame.copy()
+      cv2.rectangle(bounds, (xmin,ymin), (xmax,ymax), (0,0,255))
+
+      crop = frame[ymin:ymax, xmin:xmax]
+
+      cv2.imshow("edges", edges)
+      cv2.imshow("lines", linear)
+      cv2.imshow("bounds", bounds)
+   
+      print(crop)
+      a = crop
+      a = np.arange(crop.size)
+      b_size = 7
+      print('a =', a)
+      # bl = a.size // b_size
+      # l + r = b_size
+      # l * (bl + 1) + r * bl = a_size
+      # l = a_size - b_size * bl
+      bl = a.size // b_size
+      l = a.size - b_size * bl
+      r = b_size - l
+      print('a_size =', a.size, 'b_size =', b_size, 'left =', l,
+         'right =', r, 'block_left =', bl + 1, 'block_right =', bl)
+      assert l * (bl + 1) + r * bl == a.size
+      al, ar = a[:l * (bl + 1)], a[l * (bl + 1):]
+      al = al.reshape(l, bl + 1)
+      ar = ar.reshape(r, bl)
+      b = np.concatenate((al.mean(axis = 1), ar.mean(axis = 1)))
+      print('b =', b)
+
+   cv2.waitKey(0) 
 
 
-img = mask
-cv2.imwrite('savedimage.png', img)
-img = cv2.imread('savedimage.png')
-img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
-img = cv2.medianBlur(img,5)
-l, w = img.shape
-img_area = l*w
-
-thresh = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
-            cv2.THRESH_BINARY,11,2)
-
-contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
-print("Number of contours detected:", len(contours))
-
-for cnt in contours:
-   area = cv2.contourArea(cnt)
-   if area > 1000 and (area+5000 < img_area or area-5000 > img_area):     
-      print(area)
-      x1,y1 = cnt[0][0]
-      approx = cv2.approxPolyDP(cnt, 0.01*cv2.arcLength(cnt, True), True)
-      if len(approx) == 4:
-         x, y, w, h = cv2.boundingRect(cnt)
-         ratio = float(w)/h
-         if ratio >= 0.9 and ratio <= 1.1:
-            img = cv2.drawContours(image, [cnt], -1, (0,255,255), 3)
-            cv2.putText(img, 'Square', (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 0), 2)
-
-cv2.imshow("Shapes", img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+   cv2.destroyAllWindows() 
+   cap.release() 

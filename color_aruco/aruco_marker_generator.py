@@ -65,10 +65,10 @@ class GenerateArucoMarker:
             elif even_counts[i] % 2 == 1:
                 base5_digits.insert(i * 5 + 5, 1)
 
-        base5_digits.insert(0, 5)
+        base5_digits.insert(0, 0)
 
         # Create a 7x7 array with zeros (for a border)
-        mini_array = np.zeros((7, 7), dtype=int)
+        mini_array = np.full((7, 7), 5, dtype=int)
 
         for row in range(1, 6):  # Rows 1 to 5
             for col in range(1, 6):  # Columns 1 to 5
@@ -96,7 +96,7 @@ class GenerateArucoMarker:
 
 # Example usage:
 if __name__ == "__main__":
-    marker_id = 234234  # Example marker ID
+    marker_id = 1  # Example marker ID
     pixel_size = 100  # Example pixel size for saving the image
     marker = GenerateArucoMarker(marker_id, pixel_size)
     cv2.imwrite(f'aruco_marker_0.png', marker.create_aruco())
