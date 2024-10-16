@@ -81,9 +81,9 @@ class GenerateArucoMarker:
         color_map = {
             0: (0, 0, 0),       # black
             1: (255, 255, 255), # white
-            2: (0, 255, 0),     # red
-            3: (0, 0, 255),     # green
-            4: (255, 0, 0),     # blue
+            2: (0, 225, 0),     # green
+            3: (0, 0, 255),     # blue
+            4: (255, 0, 0),     # red
             5: (0, 255, 255)    # yellow
         }
 
@@ -96,7 +96,7 @@ class GenerateArucoMarker:
 
 # Example usage:
 if __name__ == "__main__":
-    marker_id = 1  # Example marker ID
+    marker_id = 2  # Example marker ID
     pixel_size = 100  # Example pixel size for saving the image
     marker = GenerateArucoMarker(marker_id, pixel_size)
     cv2.imwrite(f'aruco_marker_0.png', marker.create_aruco())
