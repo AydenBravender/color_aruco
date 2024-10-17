@@ -92,13 +92,3 @@ class GenerateArucoMarker:
                 color_value = color_map[mini_array[r, c]]
                 output_image[r * self.pixel_size:(r + 1) * self.pixel_size, c * self.pixel_size:(c + 1) * self.pixel_size] = color_value
         return output_image
-
-# Example usage:
-if __name__ == "__main__":
-    marker_id = 2312  # Example marker ID
-    pixel_size = 100  # Example pixel size for saving the image
-    marker = GenerateArucoMarker(marker_id, pixel_size)
-    cv2.imwrite(f'aruco_marker_0.png', marker.create_aruco())
-    # print(marker.create_aruco())
-
-    
