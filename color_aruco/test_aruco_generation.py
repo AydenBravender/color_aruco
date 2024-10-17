@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from color_aruco.aruco_marker_generator import GenerateArucoMarker
+from aruco_marker_generator import GenerateArucoMarker
 
 class TestGenerateArucoMarker(unittest.TestCase):
 
@@ -12,7 +12,7 @@ class TestGenerateArucoMarker(unittest.TestCase):
 
     def test_create_aruco_invalid_number(self):
         with self.assertRaises(ValueError):
-            marker = GenerateArucoMarker(num=95367431640625, pixel_size=10)
+            marker = GenerateArucoMarker(num=1099511627775, pixel_size=10)
             marker.create_aruco()
 
     def test_create_aruco_invalid_number(self):
@@ -24,16 +24,23 @@ class TestGenerateArucoMarker(unittest.TestCase):
         marker = GenerateArucoMarker(num=0, pixel_size=1)
         output_image = marker.create_aruco()
 
-        # Check if the borders are white
+        # Check if the borders are yellow
         top_border = output_image[0, :]
         bottom_border = output_image[-1, :]
         left_border = output_image[:, 0]
         right_border = output_image[:, -1]
 
-        self.assertTrue(np.all(top_border == [0, 255, 255]), "Top border is not black.")
-        self.assertTrue(np.all(bottom_border == [0, 255, 255]), "Bottom border is not black.")
-        self.assertTrue(np.all(left_border == [0, 255, 255]), "Left border is not black.")
-        self.assertTrue(np.all(right_border == [0, 255, 255]), "Right border is not black.")
+        self.assertTrue(np.all(top_border == [0, 255, 255]), "Top border is not yellow.")
+        self.assertTrue(np.all(bottom_border == [0, 255, 255]), "Bottom border is not yellow.")
+        self.assertTrue(np.all(left_border == [0, 255, 255]), "Left border is not yellow.")
+        self.assertTrue(np.all(right_border == [0, 255, 255]), "Right border is not yellow.")
+
+    def test_aruco_2312(self):
+        marker = GenerateArucoMarker(num=2312, pixel_size=1)
+        output_image = marker.create_aruco()
+        print(output_image.size)
+        print(list(output_image))
+        # self.assertEqual(output_image, 
 
 # If running this file directly, run the tests
 if __name__ == '__main__':
