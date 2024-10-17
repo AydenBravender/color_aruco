@@ -89,4 +89,4 @@ python -m unittest discover tests
 Contributions are welcome! Please feel free to submit a pull request or create an issue if you encounter any bugs or have feature requests.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/AydenBravender/color_aruco/blob/main/LICENSE) file for details.
