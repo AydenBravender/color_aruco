@@ -20,6 +20,7 @@ This package depends on the following libraries:
 
 - ```numpy```
 - ```opencv-python```
+- ```opencv-contrib-python```
 
 ## Usage
 
@@ -27,7 +28,7 @@ This package depends on the following libraries:
 To use the marker detector with your webcam, you can run the following code:
 ```bash
 import cv2
-from color_aruco.aruco_marker_generator import MarkerDetector
+from color_aruco.aruco_marker_detect import MarkerDetector
 
 def main():
     # Initialize marker detector
