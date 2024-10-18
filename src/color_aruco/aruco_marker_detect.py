@@ -74,7 +74,7 @@ class MarkerDetector:
         for i in range(7):
             row = []
             for j in range(7):
-                r1, g1, b1 = resized_crop[i][j]
+                r1, g1, b1 = map(float, resized_crop[i][j])
 
                 # Calculate distances to predefined colors
                 distance = []

@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from color_aruco.aruco_marker_generator import GenerateArucoMarker
+from src.color_aruco.aruco_marker_generator import GenerateArucoMarker
 
 class TestGenerateArucoMarker(unittest.TestCase):
 

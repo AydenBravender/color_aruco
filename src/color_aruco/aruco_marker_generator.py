@@ -1,5 +1,5 @@
 import numpy as np
-import cv2
+
 class GenerateArucoMarker:
     """
     A class to generate ArUco markers based on a given number.
