@@ -24,14 +24,15 @@ class MarkerDetector:
         """
         return len([num for num in lst if num % 2 == 0])
 
+
     def detect_marker(self, frame):
-        """detects color_aruco markers
+        """Detects color_aruco markers.
 
         Args:
-            frame (array): array of an image
+            frame (array): Array of an image.
 
         Returns:
-            list: list of ID's and corrdinates of bounding boxes
+            list: List of IDs and bounding boxes of detected markers.
         """
         # Convert the BGR color space of the image to HSV color space
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -50,20 +51,26 @@ class MarkerDetector:
 
         # Iterate over each detected contour
         for contour in contours:
-            # Get bounding box for the contour
-            x, y, w, h = cv2.boundingRect(contour)
+            # Approximate the contour to a polygon
+            epsilon = 0.02 * cv2.arcLength(contour, True)
+            approx = cv2.approxPolyDP(contour, epsilon, True)
 
-            # Only process if the contour is large enough to be a valid marker
-            if w > 5 and h > 5:
-                crop = frame[y:y+h, x:x+w]
-                resized_crop = cv2.resize(crop, (7, 7))
-                output = self.process_marker(resized_crop)
+            # Check if the polygon has four vertices (indicating a rectangle/square)
+            if len(approx) == 4:
+                # Get bounding box for the contour
+                x, y, w, h = cv2.boundingRect(approx)
 
-                # If the marker is valid, calculate and store the marker ID and coordinates
-                if output:
-                    base10_number = self.calculate_marker_id(output)
-                    if base10_number is not None:
-                        detected_markers.append((base10_number, (x, y, x+w, y+h)))
+                # Only process if the bounding box is large enough
+                if w > 5 and h > 5:
+                    crop = frame[y:y+h, x:x+w]
+                    resized_crop = cv2.resize(crop, (7, 7))
+                    output = self.process_marker(resized_crop)
+
+                    # If the marker is valid, calculate and store the marker ID and coordinates
+                    if output:
+                        base10_number = self.calculate_marker_id(output)
+                        if base10_number is not None:
+                            detected_markers.append((base10_number, (x, y, x+w, y+h)))
 
         return detected_markers
 
