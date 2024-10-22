@@ -2,6 +2,8 @@
 
 **Color ArUco** is a Python package designed for detecting colored ArUco markers using OpenCV. This package includes functionality for capturing video from a webcam, detecting markers in real-time, and generating ArUco markers for various applications. Its primary purpose is to significantly increase the amount of data that can be transmitted via an ArUco marker. With the ability to encode over 1 trillion bits of data, it can transmit nearly a billion times more information compared to a standard ArUco marker.
 
+![PyPI](https://img.shields.io/pypi/v/color-aruco?color=blue)
+
 ## Features
 
 - Detect colored ArUco markers in real-time from webcam footage.
