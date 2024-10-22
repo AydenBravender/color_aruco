@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Install dependencies from requirements.txt
+          pip install numpy opencv-contrib-python opencv-python  # Install the latest versions
 
       - name: Run tests
         run: |
