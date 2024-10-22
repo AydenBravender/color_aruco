@@ -1,8 +1,8 @@
 import unittest
 import cv2
 import numpy as np
-from color_aruco.aruco_marker_detect import MarkerDetector
-from color_aruco.aruco_marker_generator import GenerateArucoMarker
+from color_aruco.src.color_aruco.aruco_marker_detect import MarkerDetector
+from color_aruco.src.color_aruco.aruco_marker_generator import GenerateArucoMarker
 
 class TestDetectArucoMarker(unittest.TestCase):
 
